@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//h/Code/Projects/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
