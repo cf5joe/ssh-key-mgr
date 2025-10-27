@@ -1,17 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import type { PrerequisitesResult } from '@shared/types';
+import LoadingSpinner from '../components/LoadingSpinner';
 import '../styles/Dashboard.css';
 
 const Dashboard: React.FC = () => {
   const [prerequisites, setPrerequisites] = useState<PrerequisitesResult | null>(null);
   const [loading, setLoading] = useState(true);
+  const [keysCount, setKeysCount] = useState(0);
+  const [configsCount, setConfigsCount] = useState(0);
 
   useEffect(() => {
-    loadPrerequisites();
+    loadAll();
   }, []);
 
-  const loadPrerequisites = async () => {
+  const loadAll = async () => {
     setLoading(true);
+    await Promise.all([
+      loadPrerequisites(),
+      loadStats()
+    ]);
+    setLoading(false);
+  };
+
+  const loadPrerequisites = async () => {
     try {
       const result = await window.electronAPI.checkPrerequisites();
       if (result.success && result.data) {
@@ -19,8 +30,24 @@ const Dashboard: React.FC = () => {
       }
     } catch (error) {
       console.error('Failed to load prerequisites:', error);
-    } finally {
-      setLoading(false);
+    }
+  };
+
+  const loadStats = async () => {
+    try {
+      // Load SSH keys count
+      const keysResult = await window.electronAPI.listKeys();
+      if (keysResult.success && keysResult.data) {
+        setKeysCount(keysResult.data.length);
+      }
+
+      // Load configurations count
+      const configsResult = await window.electronAPI.parseConfig();
+      if (configsResult.success && configsResult.data) {
+        setConfigsCount(configsResult.data.length);
+      }
+    } catch (error) {
+      console.error('Failed to load stats:', error);
     }
   };
 
@@ -38,8 +65,7 @@ const Dashboard: React.FC = () => {
   if (loading) {
     return (
       <div className="page dashboard">
-        <h2>Dashboard</h2>
-        <p>Loading system status...</p>
+        <LoadingSpinner size="large" message="Loading dashboard..." />
       </div>
     );
   }
@@ -48,7 +74,7 @@ const Dashboard: React.FC = () => {
     <div className="page dashboard">
       <div className="page-header">
         <h2>Dashboard</h2>
-        <button className="btn-refresh" onClick={loadPrerequisites}>
+        <button className="btn-refresh" onClick={loadAll}>
           🔄 Refresh
         </button>
       </div>
@@ -77,16 +103,18 @@ const Dashboard: React.FC = () => {
         <h3>Quick Stats</h3>
         <div className="stats-grid">
           <div className="stat-card">
-            <div className="stat-value">0</div>
+            <div className="stat-value">{keysCount}</div>
             <div className="stat-label">SSH Keys</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value">0</div>
+            <div className="stat-value">{configsCount}</div>
             <div className="stat-label">Configurations</div>
           </div>
           <div className="stat-card">
-            <div className="stat-value">0</div>
-            <div className="stat-label">Backups</div>
+            <div className="stat-value">
+              {prerequisites?.opensshInstalled.status === 'pass' ? '✓' : '✕'}
+            </div>
+            <div className="stat-label">OpenSSH</div>
           </div>
         </div>
       </div>

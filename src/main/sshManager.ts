@@ -51,12 +51,48 @@ export async function generateSSHKey(options: KeyGenOptions): Promise<SSHKey> {
 }
 
 /**
+ * Check if a file is a private SSH key by examining its content
+ */
+async function isPrivateKeyFile(filePath: string): Promise<boolean> {
+  try {
+    const content = await fs.readFile(filePath, 'utf-8');
+
+    // Check for SSH private key headers
+    const privateKeyHeaders = [
+      '-----BEGIN RSA PRIVATE KEY-----',
+      '-----BEGIN DSA PRIVATE KEY-----',
+      '-----BEGIN EC PRIVATE KEY-----',
+      '-----BEGIN OPENSSH PRIVATE KEY-----',
+      '-----BEGIN PRIVATE KEY-----'
+    ];
+
+    return privateKeyHeaders.some(header => content.includes(header));
+  } catch (error) {
+    return false;
+  }
+}
+
+/**
  * List all SSH keys in the .ssh directory
  */
 export async function listSSHKeys(): Promise<SSHKey[]> {
   logger.info('Listing SSH keys');
 
   try {
+    // Get SSH config to check which keys are mapped
+    const { parseSSHConfig } = await import('./configParser');
+    const configs = await parseSSHConfig();
+    const mappedKeyPaths = new Set<string>();
+
+    // Collect all identity files from config
+    for (const config of configs) {
+      if (config.identityFile) {
+        // Normalize path for comparison
+        const normalizedPath = config.identityFile.replace(/^~/, process.env.USERPROFILE || '').toLowerCase();
+        mappedKeyPaths.add(path.basename(normalizedPath));
+      }
+    }
+
     const files = await listFiles(SSH_DIR);
     const keys: SSHKey[] = [];
     const processedKeys = new Set<string>();
@@ -69,8 +105,9 @@ export async function listSSHKeys(): Promise<SSHKey[]> {
 
       const fullPath = path.join(SSH_DIR, file);
 
-      // Check if it matches private key patterns
-      const isPrivateKey = PRIVATE_KEY_PATTERNS.some(pattern => pattern.test(file));
+      // Check if it's a private key by content or pattern
+      const matchesPattern = PRIVATE_KEY_PATTERNS.some(pattern => pattern.test(file));
+      const isPrivateKey = matchesPattern || await isPrivateKeyFile(fullPath);
 
       if (isPrivateKey && !processedKeys.has(file)) {
         try {
@@ -116,8 +153,33 @@ export async function getKeyInfo(keyName: string): Promise<SSHKey> {
   // Get file stats
   const stats = await getFileStats(privateKeyPath);
 
-  // Get associated hosts from config (will implement later)
+  // Get associated hosts from SSH config
   const associatedHosts: string[] = [];
+  let isMapped = false;
+
+  try {
+    const { parseSSHConfig } = await import('./configParser');
+    const configs = await parseSSHConfig();
+
+    for (const config of configs) {
+      if (config.identityFile) {
+        // Normalize paths for comparison
+        const configKeyPath = config.identityFile
+          .replace(/^~/, process.env.USERPROFILE || '')
+          .toLowerCase();
+        const configKeyName = path.basename(configKeyPath);
+
+        // Check if this config references this key
+        if (configKeyName === keyName.toLowerCase() ||
+            configKeyPath === privateKeyPath.toLowerCase()) {
+          associatedHosts.push(config.host);
+          isMapped = true;
+        }
+      }
+    }
+  } catch (error) {
+    logger.warn('Failed to check SSH config for associated hosts', String(error));
+  }
 
   return {
     name: keyName,
@@ -130,7 +192,8 @@ export async function getKeyInfo(keyName: string): Promise<SSHKey> {
     createdAt: stats.birthtime,
     modifiedAt: stats.mtime,
     size: stats.size,
-    associatedHosts
+    associatedHosts,
+    isMapped
   };
 }
 

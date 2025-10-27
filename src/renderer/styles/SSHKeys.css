@@ -1,0 +1,216 @@
+.ssh-keys-page {
+  /* SSH Keys specific styles */
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-state-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  font-size: 24px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.empty-state p {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin-bottom: 24px;
+}
+
+/* Keys Grid */
+.keys-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+}
+
+.key-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.key-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.key-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.key-type-badge {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.key-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.key-card-body {
+  margin-bottom: 16px;
+}
+
+.key-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.key-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.key-value {
+  font-size: 13px;
+  color: var(--text-primary);
+  text-align: right;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.key-fingerprint {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.key-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge-protected {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.badge-none {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.badge-mapped {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.badge-unmapped {
+  background-color: #FF9800;
+  color: white;
+}
+
+.key-card-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid var(--border-color);
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.btn-icon:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.btn-icon.btn-danger:hover {
+  background-color: var(--error-color);
+  border-color: var(--error-color);
+}
+
+/* Key Details */
+.key-details {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 12px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.detail-row strong {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.detail-row span {
+  color: var(--text-primary);
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.monospace {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+}
+
+/* Import Instructions */
+.import-instructions {
+  padding: 20px 0;
+}
+
+.import-instructions p {
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.warning-text {
+  color: var(--warning-color);
+  font-weight: 500;
+}

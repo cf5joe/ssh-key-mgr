@@ -1,0 +1,212 @@
+.backups-page {
+  /* Backups specific styles */
+}
+
+/* Backup Directory Section */
+.backup-directory {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: var(--bg-secondary);
+  border-radius: 8px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+}
+
+.directory-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.directory-info label {
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.directory-path {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--text-primary);
+  background-color: var(--bg-tertiary);
+  padding: 6px 12px;
+  border-radius: 4px;
+}
+
+/* Backups List */
+.backups-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 20px;
+}
+
+.backup-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.backup-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.backup-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.backup-icon {
+  font-size: 32px;
+}
+
+.backup-info {
+  flex: 1;
+}
+
+.backup-date {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.backup-size {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.backup-card-body {
+  margin-bottom: 16px;
+}
+
+.backup-detail {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.backup-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  min-width: 80px;
+}
+
+.backup-value {
+  font-size: 13px;
+  color: var(--text-primary);
+  text-align: right;
+  flex: 1;
+  word-break: break-all;
+}
+
+.backup-path {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+.backup-card-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Restore Modal */
+.restore-modal-content {
+  /* Restore modal content */
+}
+
+.restore-warning {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background-color: rgba(255, 152, 0, 0.1);
+  border: 2px solid var(--warning-color);
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.warning-icon {
+  font-size: 32px;
+}
+
+.restore-warning p {
+  margin: 0;
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.restore-backup-info {
+  background-color: var(--bg-secondary);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.restore-backup-info h4 {
+  margin: 0 0 12px 0;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.restore-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.restore-detail:last-child {
+  border-bottom: none;
+}
+
+.restore-detail strong {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.restore-detail span {
+  color: var(--text-primary);
+  font-size: 14px;
+}
+
+.restore-options {
+  margin-bottom: 24px;
+}
+
+.restore-options h4 {
+  margin: 0 0 16px 0;
+  color: var(--text-primary);
+  font-size: 16px;
+}
+
+.restore-options .checkbox-group {
+  margin-bottom: 12px;
+  padding: 12px;
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.restore-options .checkbox-group label {
+  font-size: 14px;
+}
+
+.restore-hint {
+  margin-top: 12px;
+  padding: 12px;
+  background-color: var(--bg-secondary);
+  border-left: 3px solid var(--accent-color);
+  color: var(--text-secondary);
+  font-size: 13px;
+}

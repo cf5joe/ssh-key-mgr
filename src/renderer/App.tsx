@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
 import SSHKeys from './pages/SSHKeys';
@@ -7,6 +7,7 @@ import Backups from './pages/Backups';
 import Settings from './pages/Settings';
 import Logs from './pages/Logs';
 import { ThemeProvider } from './context/ThemeContext';
+import { ToastProvider } from './context/ToastContext';
 import './styles/App.css';
 
 type Page = 'dashboard' | 'keys' | 'configurations' | 'backups' | 'settings' | 'logs';
@@ -35,12 +36,14 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <div className="app">
-        <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
-        <main className="main-content">
-          {renderPage()}
-        </main>
-      </div>
+      <ToastProvider>
+        <div className="app">
+          <Sidebar currentPage={currentPage} onNavigate={setCurrentPage} />
+          <main className="main-content">
+            {renderPage()}
+          </main>
+        </div>
+      </ToastProvider>
     </ThemeProvider>
   );
 };

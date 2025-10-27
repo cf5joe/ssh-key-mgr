@@ -219,16 +219,20 @@ export async function listBackups(directory: string): Promise<BackupInfo[]> {
           // Get file stats
           const stats = await fs.stat(filePath);
 
-          // Try to extract metadata (without fully extracting the archive)
-          // For now, create metadata from filename
-          const metadata: BackupMetadata = {
-            createdAt: stats.birthtime.toISOString(),
-            username: 'Unknown',
-            computerName: 'Unknown',
-            appVersion: 'Unknown',
-            files: [],
-            fileCount: 0
-          };
+          // Extract metadata from backup file
+          let metadata = await getBackupMetadata(filePath);
+
+          // Fallback to dummy metadata if extraction fails
+          if (!metadata) {
+            metadata = {
+              createdAt: stats.birthtime.toISOString(),
+              username: 'Unknown',
+              computerName: 'Unknown',
+              appVersion: 'Unknown',
+              files: [],
+              fileCount: 0
+            };
+          }
 
           backups.push({
             path: filePath,

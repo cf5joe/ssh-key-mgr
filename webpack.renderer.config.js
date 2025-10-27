@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
@@ -14,6 +15,12 @@ module.exports = {
     alias: {
       '@renderer': path.resolve(__dirname, 'src/renderer'),
       '@shared': path.resolve(__dirname, 'src/shared')
+    },
+    fallback: {
+      // Provide polyfills for Node.js modules used by React/webpack/webpack-dev-server
+      "process": require.resolve("process/browser"),
+      "buffer": require.resolve("buffer/"),
+      "events": require.resolve("events/")
     }
   },
   module: {
@@ -38,6 +45,15 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/renderer/index.html',
       filename: 'index.html'
+    }),
+    new webpack.BannerPlugin({
+      banner: 'var global = globalThis;',
+      raw: true,
+      entryOnly: false
+    }),
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+      Buffer: ['buffer', 'Buffer']
     })
   ],
   devServer: {

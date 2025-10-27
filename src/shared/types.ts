@@ -13,7 +13,8 @@ export interface SSHKey {
   hasPassphrase: boolean;
   createdAt?: Date;
   modifiedAt?: Date;
-  associatedHosts: string[];
+  associatedHosts: string[]; // Hosts in SSH config that use this key
+  isMapped: boolean; // Whether this key is referenced in SSH config
 }
 
 export interface KeyGenOptions {

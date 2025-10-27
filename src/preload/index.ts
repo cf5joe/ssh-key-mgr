@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IPC_CHANNELS } from '@shared/constants';
+import { IPC_CHANNELS } from '@shared/ipc-channels';
 import type {
   PrerequisitesResult,
   SSHKey,

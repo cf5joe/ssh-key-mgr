@@ -21,12 +21,24 @@ function createWindow() {
     icon: path.join(__dirname, '../../build/icon.ico')
   });
 
-  // Load the app
+  // Set Content Security Policy - same for dev and production now
+  mainWindow.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+    const csp = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self'";
+
+    callback({
+      responseHeaders: {
+        ...details.responseHeaders,
+        'Content-Security-Policy': [csp]
+      }
+    });
+  });
+
+  // Load the app from dist/renderer (works for both dev and production)
+  mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+
+  // Open DevTools in development mode
   if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
   }
 
   mainWindow.on('closed', () => {
