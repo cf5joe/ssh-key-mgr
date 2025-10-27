@@ -10,7 +10,8 @@
       "Bash(npm run build:renderer:*)",
       "Bash(npm install:*)",
       "Bash(npm run build:portable:*)",
-      "Bash(npx electron-builder:*)"
+      "Bash(npx electron-builder:*)",
+      "Bash(git check-ignore:*)"
     ],
     "deny": [],
     "ask": []
